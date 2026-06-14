@@ -1,0 +1,49 @@
+{
+    "name": "modernmcguire/hq_overwatch",
+    "description": "MMP HQ Companion Package",
+    "type": "library",
+    "license": "proprietary",
+    "keywords": ["laravel", "mmp", "sso", "modernmcguire"],
+    "authors": [
+        {
+            "name": "Modern McGuire Productions",
+            "email": "tommy@modernmcguire.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/http": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/routing": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/auth": "^10.0|^11.0|^12.0|^13.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0|^9.0|^10.0",
+        "pestphp/pest": "^2.0|^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ModernMcguire\\Overwatch\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ModernMcguire\\Overwatch\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ModernMcguire\\Overwatch\\OverwatchServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
