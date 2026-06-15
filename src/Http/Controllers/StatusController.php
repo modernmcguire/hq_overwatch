@@ -26,7 +26,7 @@ class StatusController
 
         return response()->json([
             'overwatch' => true,
-            'version' => Overwatch::VERSION,
+            'version' => Overwatch::version(),
         ]);
     }
 }
