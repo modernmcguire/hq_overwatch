@@ -85,7 +85,15 @@ class UserProvisioner
         }
 
         if (Schema::hasColumn($user->getTable(), 'role')) {
-            $user->forceFill(['role' => 'admin'])->save();
+            $cast = $user->getCasts()['role'] ?? null;
+
+            if ($cast && enum_exists($cast)) {
+                $role = $cast::tryFrom('admin')
+                    ?? $cast::tryFrom('super_admin')
+                    ?? $cast::cases()[0];
+
+                $user->forceFill(['role' => $role])->save();
+            }
 
             return;
         }
