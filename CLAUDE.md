@@ -26,7 +26,7 @@ A token is accepted only if **all** of these hold (`src/Support/TokenVerifier.ph
 4. Lifetime is valid: `iat` is not future-dated, `exp` is not past, AND the token is
    no older than `token_ttl` (the project enforces its own max age via `iat` rather
    than trusting HQ's `exp`; ~60s with a small clock-skew allowance).
-5. `purpose` matches the endpoint (`login` for `/sso`, `status` for `/status`).
+5. `purpose` matches the endpoint (`login` for `/sso`, `status` for `/status`, `report` for `/report`).
 6. `aud` equals the exact request host — this is also how environment binding works
    (a token minted for the dev host cannot be replayed at the prod host).
 7. (login only) `sub` email is on `allowed_domain` (`modernmcguire.com`).
@@ -50,6 +50,7 @@ with a generic 403 on purpose — do not add detail to error responses.
 | Method & path            | Purpose                                                        |
 |--------------------------|----------------------------------------------------------------|
 | `GET /mmp/overwatch/status` | Signed capability + connection check. Requires a `purpose:status` token; returns `{overwatch, version}` on success, `403` otherwise. Discloses nothing to unauthenticated callers — a valid signature already proves reachability AND a correct key. No login. |
+| `GET /mmp/overwatch/report` | Signed site report for HQ's site page. Requires a `purpose:report` token; returns `{overwatch, php, laravel, livewire, composer, backups, errors}` on success, `403` otherwise. Discloses only versions, the top-level `composer.json` packages, whether backups are configured, and the first line of the latest ERROR+ log entries (no stack traces, request data or env values). Keep it that way. |
 | `GET /mmp/overwatch/sso`    | Real login. Validates a `purpose:login` token, provisions + logs in the user. |
 
 ## Configuring this package in a consuming project
@@ -95,7 +96,7 @@ sub      user email            (login only)
 name     user display name     (login only)
 avatar   avatar url (optional) (login only)
 env      "production" | ...     (audit/log only; binding is via aud)
-purpose  "login" | "status"
+purpose  "login" | "status" | "report"
 jti      unique id (single-use)
 iat      issued-at (unix)
 exp      expiry (unix)
